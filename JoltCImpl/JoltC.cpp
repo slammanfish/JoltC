@@ -363,7 +363,7 @@ JPC_API JPC_IndexedTriangleList* JPC_IndexedTriangleList_new(const JPC_IndexedTr
 ////////////////////////////////////////////////////////////////////////////////
 // TempAllocatorImpl
 
-JPC_API JPC_TempAllocatorImpl* JPC_TempAllocatorImpl_new(uint size) {
+JPC_API JPC_TempAllocatorImpl* JPC_TempAllocatorImpl_new(JPC_uint size) {
 	return to_jpc(new JPH::TempAllocatorImpl(size));
 }
 
@@ -371,15 +371,15 @@ JPC_API JPC_TempAllocatorImpl* JPC_TempAllocatorImpl_new(uint size) {
 // JobSystemThreadPool
 
 JPC_API JPC_JobSystemThreadPool* JPC_JobSystemThreadPool_new2(
-	uint inMaxJobs,
-	uint inMaxBarriers)
+	JPC_uint inMaxJobs,
+	JPC_uint inMaxBarriers)
 {
 	return to_jpc(new JPH::JobSystemThreadPool(inMaxJobs, inMaxBarriers));
 }
 
 JPC_API JPC_JobSystemThreadPool* JPC_JobSystemThreadPool_new3(
-	uint inMaxJobs,
-	uint inMaxBarriers,
+	JPC_uint inMaxJobs,
+	JPC_uint inMaxBarriers,
 	int inNumThreads)
 {
 	return to_jpc(new JPH::JobSystemThreadPool(inMaxJobs, inMaxBarriers, inNumThreads));
@@ -388,7 +388,7 @@ JPC_API JPC_JobSystemThreadPool* JPC_JobSystemThreadPool_new3(
 ////////////////////////////////////////////////////////////////////////////////
 // JobSystemSingleThreaded
 
-JPC_API JPC_JobSystemSingleThreaded* JPC_JobSystemSingleThreaded_new(uint inMaxJobs) {
+JPC_API JPC_JobSystemSingleThreaded* JPC_JobSystemSingleThreaded_new(JPC_uint inMaxJobs) {
 	return to_jpc(new JPH::JobSystemSingleThreaded(inMaxJobs));
 }
 
@@ -448,7 +448,7 @@ class JPC_BroadPhaseLayerInterfaceBridge final : public JPH::BroadPhaseLayerInte
 public:
 	explicit JPC_BroadPhaseLayerInterfaceBridge(const void *self, JPC_BroadPhaseLayerInterfaceFns fns) : self(self), fns(fns) {}
 
-	virtual uint GetNumBroadPhaseLayers() const override {
+	virtual JPC_uint GetNumBroadPhaseLayers() const override {
 		return fns.GetNumBroadPhaseLayers(self);
 	}
 
@@ -768,7 +768,7 @@ JPC_API void JPC_EstimateCollisionResponse(
 	float inCombinedFriction,
 	float inCombinedRestitution,
 	float inMinVelocityForRestitution,	///< = 1.0f
-	uint inNumIterations				///< = 10
+	JPC_uint inNumIterations				///< = 10
 ) {
 	const auto* jphManifold = reinterpret_cast<const JPH::ContactManifold*>(inManifold);
 	auto* jphResult = reinterpret_cast<JPH::CollisionEstimationResult*>(outResult);
@@ -957,19 +957,19 @@ JPC_API void JPC_Constraint_SetConstraintPriority(JPC_Constraint* self, uint32_t
 	to_jph(self)->SetConstraintPriority(inPriority);
 }
 
-JPC_API uint JPC_Constraint_GetNumVelocityStepsOverride(const JPC_Constraint* self) {
+JPC_API JPC_uint JPC_Constraint_GetNumVelocityStepsOverride(const JPC_Constraint* self) {
 	return to_jph(self)->GetNumVelocityStepsOverride();
 }
 
-JPC_API void JPC_Constraint_SetNumVelocityStepsOverride(JPC_Constraint* self, uint inN) {
+JPC_API void JPC_Constraint_SetNumVelocityStepsOverride(JPC_Constraint* self, JPC_uint inN) {
 	to_jph(self)->SetNumVelocityStepsOverride(inN);
 }
 
-JPC_API uint JPC_Constraint_GetNumPositionStepsOverride(const JPC_Constraint* self) {
+JPC_API JPC_uint JPC_Constraint_GetNumPositionStepsOverride(const JPC_Constraint* self) {
 	return to_jph(self)->GetNumPositionStepsOverride();
 }
 
-JPC_API void JPC_Constraint_SetNumPositionStepsOverride(JPC_Constraint* self, uint inN) {
+JPC_API void JPC_Constraint_SetNumPositionStepsOverride(JPC_Constraint* self, JPC_uint inN) {
 	to_jph(self)->SetNumPositionStepsOverride(inN);
 }
 
@@ -1665,7 +1665,7 @@ JPC_API float JPC_Shape_GetVolume(const JPC_Shape* self) {
 
 JPC_API const JPC_Shape* JPC_CompoundShape_GetSubShape_Shape(
 	const JPC_CompoundShape* self,
-	uint inIdx)
+	JPC_uint inIdx)
 {
 	return to_jpc(to_jph(self)->GetSubShape(inIdx).mShape.GetPtr());
 }
@@ -2005,7 +2005,7 @@ JPC_IMPL JPH::MutableCompoundShape* JPC_MutableCompoundShape_to_jph(JPC_MutableC
 	return reinterpret_cast<JPH::MutableCompoundShape*>(self);
 }
 
-JPC_API uint JPC_MutableCompoundShape_AddShape(
+JPC_API JPC_uint JPC_MutableCompoundShape_AddShape(
 	JPC_MutableCompoundShape* self,
 	JPC_Vec3 inPosition,
 	JPC_Quat inRotation,
@@ -2017,19 +2017,19 @@ JPC_API uint JPC_MutableCompoundShape_AddShape(
 	return self_jph->AddShape(to_jph(inPosition), to_jph(inRotation), to_jph(inShape), inUserData);
 }
 
-JPC_API void JPC_MutableCompoundShape_RemoveShape(JPC_MutableCompoundShape* self, uint inIndex) {
+JPC_API void JPC_MutableCompoundShape_RemoveShape(JPC_MutableCompoundShape* self, JPC_uint inIndex) {
 	JPH::MutableCompoundShape* self_jph = JPC_MutableCompoundShape_to_jph(self);
 
 	self_jph->RemoveShape(inIndex);
 }
 
-JPC_API void JPC_MutableCompoundShape_ModifyShape(JPC_MutableCompoundShape* self, uint inIndex, JPC_Vec3 inPosition, JPC_Quat inRotation) {
+JPC_API void JPC_MutableCompoundShape_ModifyShape(JPC_MutableCompoundShape* self, JPC_uint inIndex, JPC_Vec3 inPosition, JPC_Quat inRotation) {
 	JPH::MutableCompoundShape* self_jph = JPC_MutableCompoundShape_to_jph(self);
 
 	self_jph->ModifyShape(inIndex, to_jph(inPosition), to_jph(inRotation));
 }
 
-JPC_API void JPC_MutableCompoundShape_ModifyShape2(JPC_MutableCompoundShape* self, uint inIndex, JPC_Vec3 inPosition, JPC_Quat inRotation, const JPC_Shape* inShape) {
+JPC_API void JPC_MutableCompoundShape_ModifyShape2(JPC_MutableCompoundShape* self, JPC_uint inIndex, JPC_Vec3 inPosition, JPC_Quat inRotation, const JPC_Shape* inShape) {
 	JPH::MutableCompoundShape* self_jph = JPC_MutableCompoundShape_to_jph(self);
 
 	self_jph->ModifyShape(inIndex, to_jph(inPosition), to_jph(inRotation), to_jph(inShape));
@@ -2990,10 +2990,10 @@ JPC_API JPC_PhysicsSystem* JPC_PhysicsSystem_new() {
 
 JPC_API void JPC_PhysicsSystem_Init(
 	JPC_PhysicsSystem* self,
-	uint inMaxBodies,
-	uint inNumBodyMutexes,
-	uint inMaxBodyPairs,
-	uint inMaxContactConstraints,
+	JPC_uint inMaxBodies,
+	JPC_uint inNumBodyMutexes,
+	JPC_uint inMaxBodyPairs,
+	JPC_uint inMaxContactConstraints,
 	JPC_BroadPhaseLayerInterface* inBroadPhaseLayerInterface,
 	JPC_ObjectVsBroadPhaseLayerFilter* inObjectVsBroadPhaseLayerFilter,
 	JPC_ObjectLayerPairFilter* inObjectLayerPairFilter)

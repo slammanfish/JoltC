@@ -1,4 +1,5 @@
-#pragma once
+#ifndef JOLT_C_H
+#define JOLT_C_H
 
 #ifndef ENSURE_TESTS
 	#define ENSURE_EQUAL(a, b)
@@ -10,3 +11,5 @@
 
 #include "JoltC/Enums.h"
 #include "JoltC/Functions.h"
+
+#endif

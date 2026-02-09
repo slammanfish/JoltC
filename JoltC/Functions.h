@@ -1,4 +1,5 @@
-#pragma once
+#ifndef JOLT_C_FUNC_H
+#define JOLT_C_FUNC_H
 
 #include <stdalign.h>
 #include <stdbool.h>
@@ -14,7 +15,7 @@
 static float JPC_PI = 3.14159265358979323846f;
 
 // C-compatible typedefs that match Jolt's internal primitive typedefs.
-#define uint unsigned int
+#define JPC_uint unsigned int
 
 #ifdef __cplusplus
 extern "C" {
@@ -244,7 +245,7 @@ typedef struct JPC_CompoundShape JPC_CompoundShape;
 // FIXME: The real API should return a new type, JPC_CompoundShape_SubShape*
 JPC_API const JPC_Shape* JPC_CompoundShape_GetSubShape_Shape(
 	const JPC_CompoundShape* self,
-	uint inIdx);
+	JPC_uint inIdx);
 
 JPC_API uint32_t JPC_CompoundShape_GetSubShapeIndexFromID(
 	const JPC_CompoundShape* self,
@@ -256,7 +257,7 @@ JPC_API uint32_t JPC_CompoundShape_GetSubShapeIndexFromID(
 
 typedef struct JPC_TempAllocatorImpl JPC_TempAllocatorImpl;
 
-JPC_API JPC_TempAllocatorImpl* JPC_TempAllocatorImpl_new(uint size);
+JPC_API JPC_TempAllocatorImpl* JPC_TempAllocatorImpl_new(JPC_uint size);
 JPC_API void JPC_TempAllocatorImpl_delete(JPC_TempAllocatorImpl* object);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -267,16 +268,16 @@ typedef struct JPC_JobSystemThreadPool JPC_JobSystemThreadPool;
 typedef struct JPC_JobSystemSingleThreaded JPC_JobSystemSingleThreaded;
 
 JPC_API JPC_JobSystemThreadPool* JPC_JobSystemThreadPool_new2(
-	uint inMaxJobs,
-	uint inMaxBarriers);
+	JPC_uint inMaxJobs,
+	JPC_uint inMaxBarriers);
 JPC_API JPC_JobSystemThreadPool* JPC_JobSystemThreadPool_new3(
-	uint inMaxJobs,
-	uint inMaxBarriers,
+	JPC_uint inMaxJobs,
+	JPC_uint inMaxBarriers,
 	int inNumThreads);
 
 JPC_API void JPC_JobSystemThreadPool_delete(JPC_JobSystemThreadPool* object);
 
-JPC_API JPC_JobSystemSingleThreaded* JPC_JobSystemSingleThreaded_new(uint inMaxJobs);
+JPC_API JPC_JobSystemSingleThreaded* JPC_JobSystemSingleThreaded_new(JPC_uint inMaxJobs);
 JPC_API void JPC_JobSystemSingleThreaded_delete(JPC_JobSystemSingleThreaded* object);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -306,7 +307,7 @@ JPC_API void JPC_GroupFilter_delete(JPC_GroupFilter* object);
 // BroadPhaseLayerInterface
 
 typedef struct JPC_BroadPhaseLayerInterfaceFns {
-	uint (*GetNumBroadPhaseLayers)(const void *self);
+	JPC_uint (*GetNumBroadPhaseLayers)(const void *self);
 	JPC_BroadPhaseLayer (*GetBroadPhaseLayer)(const void *self, JPC_ObjectLayer inLayer);
 } JPC_BroadPhaseLayerInterfaceFns;
 
@@ -435,7 +436,7 @@ JPC_API void JPC_ObjectLayerPairFilter_delete(JPC_ObjectLayerPairFilter* object)
 // ContactListener
 
 typedef struct JPC_ContactPoints {
-	uint length;
+	JPC_uint length;
 	JPC_Vec3 points[64];
 } JPC_ContactPoints;
 
@@ -580,7 +581,7 @@ JPC_API JPC_ContactListener* JPC_ContactListener_new(
 
 JPC_API void JPC_ContactListener_delete(JPC_ContactListener* object);
 
-static const uint JPC_ContactPointsCapacity = 64;
+static const JPC_uint JPC_ContactPointsCapacity = 64;
 
 typedef struct JPC_Impulse {
 	float ContactImpulse;				///< Estimated contact impulses (kg m / s)
@@ -597,7 +598,7 @@ typedef struct JPC_CollisionEstimationResult {
 	JPC_Vec3 Tangent1;						///< Normalized tangent of contact normal
 	JPC_Vec3 Tangent2;						///< Second normalized tangent of contact normal (forms a basis with mTangent1 and mWorldSpaceNormal)
 
-	uint NumImpulses;
+	JPC_uint NumImpulses;
 	JPC_Impulse Impulses[JPC_ContactPointsCapacity];
 } JPC_CollisionEstimationResult;
 
@@ -611,7 +612,7 @@ JPC_API void JPC_EstimateCollisionResponse(
 	float inCombinedFriction,
 	float inCombinedRestitution,
 	float inMinVelocityForRestitution,	///< = 1.0f
-	uint inNumIterations				///< = 10
+	JPC_uint inNumIterations				///< = 10
 );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -721,11 +722,11 @@ JPC_API void JPC_Constraint_delete(JPC_Constraint* self);
 JPC_API uint32_t JPC_Constraint_GetConstraintPriority(const JPC_Constraint* self);
 JPC_API void JPC_Constraint_SetConstraintPriority(JPC_Constraint* self, uint32_t inPriority);
 
-JPC_API uint JPC_Constraint_GetNumVelocityStepsOverride(const JPC_Constraint* self);
-JPC_API void JPC_Constraint_SetNumVelocityStepsOverride(JPC_Constraint* self, uint inN);
+JPC_API JPC_uint JPC_Constraint_GetNumVelocityStepsOverride(const JPC_Constraint* self);
+JPC_API void JPC_Constraint_SetNumVelocityStepsOverride(JPC_Constraint* self, JPC_uint inN);
 
-JPC_API uint JPC_Constraint_GetNumPositionStepsOverride(const JPC_Constraint* self);
-JPC_API void JPC_Constraint_SetNumPositionStepsOverride(JPC_Constraint* self, uint inN);
+JPC_API JPC_uint JPC_Constraint_GetNumPositionStepsOverride(const JPC_Constraint* self);
+JPC_API void JPC_Constraint_SetNumPositionStepsOverride(JPC_Constraint* self, JPC_uint inN);
 
 JPC_API bool JPC_Constraint_GetEnabled(const JPC_Constraint* self);
 JPC_API void JPC_Constraint_SetEnabled(JPC_Constraint* self, bool inEnabled);
@@ -852,8 +853,8 @@ JPC_API float JPC_SliderConstraint_GetTotalLambdaMotor(const JPC_SliderConstrain
 typedef struct JPC_ConstraintSettings {
 	bool Enabled;
 	uint32_t ConstraintPriority;
-	uint NumVelocityStepsOverride;
-	uint NumPositionStepsOverride;
+	JPC_uint NumVelocityStepsOverride;
+	JPC_uint NumPositionStepsOverride;
 	float DrawConstraintSize;
 	uint64_t UserData;
 } JPC_ConstraintSettings;
@@ -1075,7 +1076,7 @@ typedef struct JPC_MeshShapeSettings {
 	JPC_IndexedTriangle* IndexedTriangles;
 	size_t IndexedTrianglesLen;
 	// PhysicsMaterialList				mMaterials;
-	// uint							mMaxTrianglesPerLeaf = 8;
+	// JPC_uint							mMaxTrianglesPerLeaf = 8;
 	// float							mActiveEdgeCosThresholdAngle = 0.996195f;
 	// bool							mPerTriangleUserData = false;
 } JPC_MeshShapeSettings;
@@ -1216,16 +1217,16 @@ JPC_API bool JPC_StaticCompoundShapeSettings_Create(const JPC_StaticCompoundShap
 
 typedef struct JPC_MutableCompoundShape JPC_MutableCompoundShape;
 
-JPC_API uint JPC_MutableCompoundShape_AddShape(
+JPC_API JPC_uint JPC_MutableCompoundShape_AddShape(
 	JPC_MutableCompoundShape* self,
 	JPC_Vec3 inPosition,
 	JPC_Quat inRotation,
 	const JPC_Shape* inShape,
 	uint32_t inUserData);
 
-JPC_API void JPC_MutableCompoundShape_RemoveShape(JPC_MutableCompoundShape* self, uint inIndex);
-JPC_API void JPC_MutableCompoundShape_ModifyShape(JPC_MutableCompoundShape* self, uint inIndex, JPC_Vec3 inPosition, JPC_Quat inRotation);
-JPC_API void JPC_MutableCompoundShape_ModifyShape2(JPC_MutableCompoundShape* self, uint inIndex, JPC_Vec3 inPosition, JPC_Quat inRotation, const JPC_Shape* inShape);
+JPC_API void JPC_MutableCompoundShape_RemoveShape(JPC_MutableCompoundShape* self, JPC_uint inIndex);
+JPC_API void JPC_MutableCompoundShape_ModifyShape(JPC_MutableCompoundShape* self, JPC_uint inIndex, JPC_Vec3 inPosition, JPC_Quat inRotation);
+JPC_API void JPC_MutableCompoundShape_ModifyShape2(JPC_MutableCompoundShape* self, JPC_uint inIndex, JPC_Vec3 inPosition, JPC_Quat inRotation, const JPC_Shape* inShape);
 JPC_API void JPC_MutableCompoundShape_AdjustCenterOfMass(JPC_MutableCompoundShape* self);
 
 // TODO:
@@ -1278,8 +1279,8 @@ typedef struct JPC_BodyCreationSettings {
 	float MaxLinearVelocity;
 	float MaxAngularVelocity;
 	float GravityFactor;
-	uint NumVelocityStepsOverride;
-	uint NumPositionStepsOverride;
+	JPC_uint NumVelocityStepsOverride;
+	JPC_uint NumPositionStepsOverride;
 	JPC_OverrideMassProperties OverrideMassProperties;
 	float InertiaMultiplier;
 
@@ -1604,10 +1605,10 @@ JPC_API JPC_PhysicsSystem* JPC_PhysicsSystem_new();
 JPC_API void JPC_PhysicsSystem_delete(JPC_PhysicsSystem* object);
 JPC_API void JPC_PhysicsSystem_Init(
 	JPC_PhysicsSystem* self,
-	uint inMaxBodies,
-	uint inNumBodyMutexes,
-	uint inMaxBodyPairs,
-	uint inMaxContactConstraints,
+	JPC_uint inMaxBodies,
+	JPC_uint inNumBodyMutexes,
+	JPC_uint inMaxBodyPairs,
+	JPC_uint inMaxContactConstraints,
 	JPC_BroadPhaseLayerInterface* inBroadPhaseLayerInterface,
 	JPC_ObjectVsBroadPhaseLayerFilter* inObjectVsBroadPhaseLayerFilter,
 	JPC_ObjectLayerPairFilter* inObjectLayerPairFilter);
@@ -1645,4 +1646,6 @@ JPC_API void JPC_PhysicsSystem_SetContactListener(JPC_PhysicsSystem* self, JPC_C
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

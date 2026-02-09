@@ -1,4 +1,5 @@
-#pragma once
+#ifndef JOLT_C_ENUM_H
+#define JOLT_C_ENUM_H
 
 #include <stdint.h>
 
@@ -380,3 +381,5 @@ typedef enum JPC_MotorState: uint32_t {
 ENSURE_ENUM_EQ(JPC_MOTOR_STATE_OFF, JPH::EMotorState::Off)
 ENSURE_ENUM_EQ(JPC_MOTOR_STATE_VELOCITY, JPH::EMotorState::Velocity)
 ENSURE_ENUM_EQ(JPC_MOTOR_STATE_POSITION, JPH::EMotorState::Position)
+
+#endif
