@@ -2549,9 +2549,9 @@ JPC_API void JPC_BodyInterface_DestroyBody(JPC_BodyInterface *self, JPC_BodyID i
 	to_jph(self)->DestroyBody(to_jph(inBodyID));
 }
 
-// JPC_API void JPC_BodyInterface_DestroyBodies(JPC_BodyInterface *self, const JPC_BodyID *inBodyIDs, int inNumber) {
-// 	return to_jph(self)->DestroyBodies(to_jph(inBodyIDs), int inNumber);
-// }
+JPC_API void JPC_BodyInterface_DestroyBodies(JPC_BodyInterface *self, const JPC_BodyID *inBodyIDs, int inNumber) {
+	return to_jph(self)->DestroyBodies(to_jph(inBodyIDs), int inNumber);
+}
 
 JPC_API void JPC_BodyInterface_AddBody(JPC_BodyInterface *self, JPC_BodyID inBodyID, JPC_Activation inActivationMode) {
 	to_jph(self)->AddBody(to_jph(inBodyID), to_jph(inActivationMode));
